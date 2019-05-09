@@ -17,6 +17,9 @@ if (!fs.existsSync(file)) {
     process.exit(-1);
 }
 
+//define method to process the csv
+//filePath (String): path to csv file
+//callback (Function): Receives Array of csv rows as its parameter 
 const processCsv = (filePath, callback) => {
 
     console.log('Started: Reading CSV Data');
@@ -56,6 +59,8 @@ const processCsv = (filePath, callback) => {
         });
 }
 
+//process the csv file providing a callback function 
+//that writes the records to a new csv file
 processCsv(file, (data) => {
     console.log('Started: Writing CSV Data');
     const ws = fs.createWriteStream(`updated_${file}`);
