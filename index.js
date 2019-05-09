@@ -9,17 +9,17 @@ if (process.argv.length <= 2) {
 }
 
 //set the filename from the command line
-const file = process.argv[2];
+const filePath = process.argv[2];
 
 //make sure file exists
-if (!fs.existsSync(file)) {
-    console.error(`${file} does not exist`);
+if (!fs.existsSync(filePath)) {
+    console.error(`${filePath} does not exist`);
     process.exit(1);
 }
 
-//define method to process the csv
+//method to process the csv
+//returns a promise that resolves the array of rows with added column identical to the first
 //filePath (String): path to csv file
-//returns a promise that is resolved when all rows are processed
 const readCSV = (filePath) => {
 
     return new Promise(function (resolve, reject) {
@@ -32,7 +32,7 @@ const readCSV = (filePath) => {
 
                 //we don't want to continue if the file has more than 2 columns
                 if (data.length > 2) {
-                    throw (`${filePath} has more than two columns of data`);
+                    throw (`${path.basename(filePath)} has more than two columns of data`);
                 }
 
                 //if we have 2 columns then we need to see if the second is blank.
@@ -40,7 +40,7 @@ const readCSV = (filePath) => {
                 if (data.length === 2) {
                     //if we have valid data in the second column, abort
                     if (data[1] !== "") {
-                        throw (`${filePath} already has 2 valid colums of data`);
+                        throw (`${path.basename(filePath)} already has 2 valid colums of data`);
                     }
 
                     //remove the empty column and continue.
@@ -63,12 +63,14 @@ const readCSV = (filePath) => {
 }
 
 //create csv
+//data (Array): array of objects to be written as rows to csv
+//filename (String): name of file for new csv
 //returns promise
-const writeCSV = (data) => {
+const writeCSV = (data, fileName) => {
 
     return new Promise(function (resolve, reject) {
 
-        const ws = fs.createWriteStream(`updated_${file}`);
+        const ws = fs.createWriteStream(`${fileName}`);
         fastcsv
             .write(data, { headers: false })
             .pipe(ws)
@@ -81,26 +83,43 @@ const writeCSV = (data) => {
     })
 }
 
-//read in the csv file and when finished write the records to a new csv
-console.log('Started: Reading CSV Data');
-readCSV(file)
-    .then((data) => {
+//main method that orchestrates all the things
+const processCSV = (filePath) => {
+    return new Promise(function (resolve, reject) {
 
-        console.log(`Completed: Reading CSV Data (${data.length.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} rows)`);
-        console.log('Started: Writing CSV Data');
+        //read in the csv file and when finished write the records to a new csv
+        console.log('Started: Reading CSV Data');
+        readCSV(filePath)
+            .then((data) => {
 
-        writeCSV(data)
-            .then(() => {
-                console.log('Completed: Writing CSV Data')
+                console.log(`Completed: Reading CSV Data (${data.length.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} rows)`);
+                console.log('Started: Writing CSV Data');
+
+                writeCSV(data, `updated_${path.basename(filePath)}`)
+                    .then(() => {
+                        console.log('Completed: Writing CSV Data')
+                        resolve();
+                    })
+                    .catch((err) => {
+                        reject(err)
+                    })
+
             })
             .catch((err) => {
-                console.error(`Error: ${err}`)
-                process.exit(1);
+                reject(err)
             })
 
     })
-    .catch((err) => {
+}
+
+//call main method that orchestates all the things 
+//let us know if it went well or bad
+processCSV(filePath)
+    .then(()=>console.log("Script Executed Succsfully!"))
+    .catch((err)=>{
         console.error(`Error: ${err}`)
-        process.exit(1);
+        console.log("Script Failed!")
+        process.exit(1)
     })
+
 
