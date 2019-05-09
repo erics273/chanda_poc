@@ -1,5 +1,5 @@
 # CSV Column Duplicator 
-This application takes a csv file with one column and outputs a new csv with 2 columns. The second column is a duplicate of the first column. It was created to because the CSV files being parsed have over a million rows in them. Doing this with standard tools was taking ~30-60 minutes. This script is to serve as a proof of concept. It accomplishes the task in a ~10 seconds for a file with over 1 million rows.
+This application takes a csv file with one column and outputs a new csv with 2 columns. The second column is a duplicate of the first column. It was created to because the CSV files being parsed have over a million rows in them. Doing this with standard tools was taking ~30-60 minutes. This script is to serve as a proof of concept. It accomplishes the task in a ~5 seconds for a file with over 1 million rows.
 
 ## Installation
 
