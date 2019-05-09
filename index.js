@@ -30,22 +30,7 @@ const readCSV = (filePath) => {
         fastcsv.fromPath(filePath, { headers: false, ignoreEmpty: false })
             .on("data", data => {
 
-                //we don't want to continue if the file has more than 2 columns
-                if (data.length > 2) {
-                    throw (`${path.basename(filePath)} has more than two columns of data`);
-                }
-
-                //if we have 2 columns then we need to see if the second is blank.
-                //sometimes the file has the comman but no data for the second column
-                if (data.length === 2) {
-                    //if we have valid data in the second column, abort
-                    if (data[1] !== "") {
-                        throw (`${path.basename(filePath)} already has 2 valid colums of data`);
-                    }
-
-                    //remove the empty column and continue.
-                    data.length = 1;
-                }
+                validateData(data)
 
                 //create a new record in our records with the duplicated column
                 records.push([data[0], data[0]])
@@ -81,6 +66,25 @@ const writeCSV = (data, fileName) => {
                 resolve();
             });
     })
+}
+
+const validateData = (data) => {
+    //we don't want to continue if the file has more than 2 columns
+    if (data.length > 2) {
+        throw (`${path.basename(filePath)} has more than two columns of data`);
+    }
+
+    //if we have 2 columns then we need to see if the second is blank.
+    //sometimes the file has the comman but no data for the second column
+    if (data.length === 2) {
+        //if we have valid data in the second column, abort
+        if (data[1] !== "") {
+            throw (`${path.basename(filePath)} already has 2 valid colums of data`);
+        }
+
+        //remove the empty column and continue.
+        data.length = 1;
+    }
 }
 
 //main method that orchestrates all the things
