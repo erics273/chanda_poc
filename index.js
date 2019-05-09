@@ -94,13 +94,13 @@ readCSV(file)
                 console.log('Completed: Writing CSV Data')
             })
             .catch((err) => {
-                console.error(err)
+                console.error(`Error: ${err}`)
                 process.exit(1);
             })
 
     })
     .catch((err) => {
-        console.error(err)
+        console.error(`Error: ${err}`)
         process.exit(1);
     })
 
