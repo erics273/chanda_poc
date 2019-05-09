@@ -4,7 +4,7 @@ This application takes a csv file with one column and outputs a new csv with 2 c
 ## Installation
 
 * Clone this repo
-* cd into to the cloned repo repo and run `npm -i`
+* `cd` into to the cloned repo repo and run `npm -i`
 
 ## Usage
 You have been provided two sample csv files. 
