@@ -4,10 +4,13 @@ This application takes a csv file with one column and outputs a new csv with 2 c
 ## Installation
 
 * Clone this repo
-* cd into to repo and run `npm -i`
+* cd into to the cloned repo repo and run `npm -i`
 
 ## Usage
-You have been provided two sample csv files. **data_hundred.csv** contains 100 rows of data. **data_million.csv** contains over 1,000,000 rows of data.
+You have been provided two sample csv files. 
+
+* **data_hundred.csv** - contains 100 rows of data. 
+* **data_million.csv** - contains over 1,000,000 rows of data.
 
 **Example Usage:**
 
@@ -17,7 +20,7 @@ $ node index CSV_FILE
 
 **Proccess sample data:**
 
-Outputs updates_data_million.csv with added column
+Outputs updated_data_million.csv with the added column
 ```bash
 $ node index data_million.csv
 ```
