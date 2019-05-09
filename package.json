@@ -1,0 +1,14 @@
+{
+  "name": "chanda_poc",
+  "version": "1.0.0",
+  "description": "take single column csv and duplicated column. Results in 2 identical colums in a new file",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fast-csv": "^2.5.0"
+  }
+}
