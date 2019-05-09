@@ -5,17 +5,17 @@ const path = require('path');
 //make sure we have a filename passed in from the command line
 if (process.argv.length <= 2) {
     console.log("Usage: node " + path.basename(__filename) + " CSV_FILE");
-    process.exit(-1);
-}
-
-//make sure file exists
-if (!fs.existsSync(file)) {
-    console.error(`${file} does not exist`);
-    process.exit(-1);
+    process.exit(1);
 }
 
 //set the filename from the command line
 const file = process.argv[2];
+
+//make sure file exists
+if (!fs.existsSync(file)) {
+    console.error(`${file} does not exist`);
+    process.exit(1);
+}
 
 //define method to process the csv
 //filePath (String): path to csv file
@@ -93,9 +93,14 @@ readCSV(file)
             .then(() => {
                 console.log('Completed: Writing CSV Data')
             })
+            .catch((err) => {
+                console.error(err)
+                process.exit(1);
+            })
 
     })
     .catch((err) => {
         console.error(err)
+        process.exit(1);
     })
 
