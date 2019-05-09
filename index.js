@@ -84,42 +84,35 @@ const writeCSV = (data, fileName) => {
 }
 
 //main method that orchestrates all the things
-const processCSV = (filePath) => {
-    return new Promise(function (resolve, reject) {
+const processCSV = async (filePath) => {
 
-        //read in the csv file and when finished write the records to a new csv
+
+    try {
+        //read the csv
         console.log('Started: Reading CSV Data');
-        readCSV(filePath)
-            .then((data) => {
+        let data = await readCSV(filePath)
+        console.log(`Completed: Reading CSV Data (${data.length.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} rows)`);
+        
+        //write the new csv
+        console.log('Started: Writing CSV Data');
+        await writeCSV(data, `updated_${path.basename(filePath)}`)
+        console.log('Completed: Writing CSV Data')
+        
+        //yay it all worked
+        console.log("Script Executed Succsfully!")
 
-                console.log(`Completed: Reading CSV Data (${data.length.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')} rows)`);
-                console.log('Started: Writing CSV Data');
+    } catch (err) {
 
-                writeCSV(data, `updated_${path.basename(filePath)}`)
-                    .then(() => {
-                        console.log('Completed: Writing CSV Data')
-                        resolve();
-                    })
-                    .catch((err) => {
-                        reject(err)
-                    })
-
-            })
-            .catch((err) => {
-                reject(err)
-            })
-
-    })
-}
-
-//call main method that orchestates all the things 
-//let us know if it went well or bad
-processCSV(filePath)
-    .then(()=>console.log("Script Executed Succsfully!"))
-    .catch((err)=>{
+        //oh no, things didn't work out
         console.error(`Error: ${err}`)
         console.log("Script Failed!")
         process.exit(1)
-    })
+
+    }
+
+}
+
+//start processing the CSV
+processCSV(filePath);
 
 
